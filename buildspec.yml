@@ -14,7 +14,7 @@ phases:
 
   install:
     runtime-versions:
-      java: correcto11
+      java: corretto17
 
 
   build:
