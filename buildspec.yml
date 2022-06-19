@@ -11,9 +11,9 @@ phases:
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
       - yum install java-17-amazon-corretto-devel -y
       - alternatives --set java /usr/lib/jvm/java-17-amazon-corretto.aarch64/bin/java
-      - wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
-      - tar xzvf apache-maven-3.8.6-bin.tar.gz
-      - export PATH=/opt/apache-maven-3.8.6/bin:$PATH
+      - wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz -o /tmp/apache-maven-3.8.6-bin.tar.gz
+      - tar xzvf /tmp/apache-maven-3.8.6-bin.tar.gz
+      - export PATH=/tmp/apache-maven-3.8.6-bin/bin:$PATH
 
   install:
     runtime-versions:
