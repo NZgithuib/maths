@@ -1,0 +1,45 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging into Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --region @AWS_DEFAULT_REGION --no-include-email)
+      - REPOSITORY_URI=088857552342.dkr.ecr.ap-southeast-2.amazonaws.com/mathservice
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-$echo $CODEBUILD_BUILD_ID | awk - F":" '{print $2}')
+
+  install:
+    runtime-versions:
+      java: correcto17
+
+  build:
+    commands:
+      - echo Build started on 'date'
+      - ./mvn clean package
+      - echo Building the docker Image...
+      - docker build -t $REPOSITORY_URI:latest
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo Build completed on 'date'
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:IMAGE_TAG
+      - docker Writing image definition file...
+      - printf '[{"name":"cicd-container", "imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinition.json
+      - cat imagedefinition.json
+
+artifacts:
+  files:
+    - '**/*'
+    - imagedefinitions.json
+  base-directory: './build/libs'
+reports:
+      test-report-group: #Junit reports
+        files:
+          - 'TEST-ismail.maths.MathApplicationtest.XML'
+        #discard-paths: false #do not reove file paths from test result file
+        base-directory: './build/test-results/test'
