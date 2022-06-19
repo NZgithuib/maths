@@ -11,9 +11,10 @@ phases:
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
       - yum install java-17-amazon-corretto-devel -y
       - alternatives --set java /usr/lib/jvm/java-17-amazon-corretto.aarch64/bin/java
-      - sudo wget https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
-      - sudo sed -i s/$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
-      - sudo yum install -y apache-maven
+      - sudo wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
+      - tar xzvf apache-maven-3.8.6-bin.tar.gz
+      - unzip apache-maven-3.8.6-bin.zip
+      - export PATH=/opt/apache-maven-3.8.6/bin:$PATH
 
   install:
     runtime-versions:
