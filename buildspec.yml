@@ -8,7 +8,7 @@ phases:
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - REPOSITORY_URI=088857552342.dkr.ecr.ap-southeast-2.amazonaws.com/mathservice
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk - F":" '{print $2}')
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
       - yum install java-17-amazon-corretto-devel -y
       - alternatives --set java /usr/lib/jvm/java-17-amazon-corretto.aarch64/bin/java
 
